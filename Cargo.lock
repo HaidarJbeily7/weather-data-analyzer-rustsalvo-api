@@ -1415,6 +1415,7 @@ name = "weather-data-analyzer-rustsalvo-api"
 version = "0.1.0"
 dependencies = [
  "salvo",
+ "serde",
  "tokio",
  "tracing",
  "tracing-subscriber",
