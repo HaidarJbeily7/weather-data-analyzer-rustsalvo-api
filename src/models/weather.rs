@@ -1,25 +1,16 @@
-use serde::{Serialize, Deserialize};
+use std::collections::HashMap;
 
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Weather {
-    city: String,
+    data: HashMap<String, String>,
 }
+
 impl Weather {
-    pub fn new(city: &str) -> Self {
+    pub fn new(paylaod: &HashMap<String, String>) -> Self {
         Self {
-            city: String::from(city)
+            data: paylaod.clone(),
         }
     }
 }
-
-pub trait WeatherTrait {
-    fn get_weather(&self) -> String;
-}
-
-impl WeatherTrait for Weather {
-    fn get_weather(&self) -> String {
-        format!("Hello, {}!", self.city)
-    }
-}
-

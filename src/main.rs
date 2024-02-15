@@ -1,9 +1,11 @@
-use std::collections::HashMap;
-
+use dotenv::dotenv;
 use salvo::prelude::*;
 
 mod models;
-use models::weather::{Weather, WeatherTrait};
+use models::weather::Weather;
+
+mod services;
+use services::weather_api_service::{ThirdPartyServiceProvider, WeatherAPIService};
 
 #[handler]
 async fn health() -> &'static str {
@@ -13,24 +15,21 @@ async fn health() -> &'static str {
 #[handler]
 async fn analyze(req: &mut Request, _: &mut Depot, res: &mut Response) {
     let city = req.params().get("city").clone().unwrap();
-    let weather= Weather::new(city);
-    print!("Health, {}!", weather.get_weather());
-    let mut response_body = HashMap::new();
-    response_body.insert("city", weather.get_weather());
-    res.render(Json(response_body));
+    let api_service = WeatherAPIService { city: city.clone() };
+    let data = api_service.get_weather().await.unwrap();
+    let weather = Weather::new(&data);
+    res.render(Json(weather));
 }
 
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt().init();
-
+    dotenv().ok();
 
     let analyze_router = Router::with_path("/analyze/<city>").get(analyze);
 
-    let router: Router = Router::with_path("")
-                                .get(health)
-                                .push(analyze_router);
-    
+    let router: Router = Router::with_path("").get(health).push(analyze_router);
+
     let acceptor = TcpListener::new("127.0.0.1:5800").bind().await;
     Server::new(acceptor).serve(router).await;
 }
