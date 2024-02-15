@@ -38,7 +38,7 @@ This project is a simple weather analysis server that utilizes a third-party wea
 2. Create a .env file in the project root directory and set the environment variable for the weather API key:
 
    ```bash
-       WEATHER_API_KEY=your_weather_api_key
+    WEATHER_API_KEY=your_weather_api_key
    ```
 
 3. Build & Run the project:
