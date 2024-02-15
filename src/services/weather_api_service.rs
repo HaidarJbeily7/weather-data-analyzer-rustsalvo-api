@@ -1,9 +1,10 @@
 use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 
 pub trait ThirdPartyServiceProvider {
-    async fn get_weather(&self) -> Result<HashMap<String, String>, String>;
+    async fn get_weather(&self) -> Result<HashMap<String, Value>, String>;
 }
 
 pub struct WeatherAPIService {
@@ -12,12 +13,12 @@ pub struct WeatherAPIService {
 
 #[derive(Debug, Deserialize, Serialize)]
 struct WeatherAPIServiceProviderResponse {
-    location: HashMap<String, String>,
-    current: HashMap<String, String>,
+    location: HashMap<String, Value>,
+    current: HashMap<String, Value>,
 }
 
 impl ThirdPartyServiceProvider for WeatherAPIService {
-    async fn get_weather(&self) -> Result<HashMap<String, String>, String> {
+    async fn get_weather(&self) -> Result<HashMap<String, Value>, String> {
         let weather_api_token =
             std::env::var("WEATHER_API_KEY").expect("Please Set the environment variable");
 

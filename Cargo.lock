@@ -1875,6 +1875,7 @@ dependencies = [
  "reqwest",
  "salvo",
  "serde",
+ "serde_json",
  "tokio",
  "tracing",
  "tracing-subscriber",
